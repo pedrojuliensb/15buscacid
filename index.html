@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>BuscaCID – Consulta Rápida de CID-10</title>
+  <meta name="description" content="Busca rápida e intuitiva de códigos CID-10 com resultados instantâneos e completos. Encontre o código certo para sua necessidade.">
+  <meta name="keywords" content="CID-10, busca CID, código CID, classificação internacional de doenças, saúde">
+  <meta name="robots" content="index,follow">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+    header, footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #0066cc;
+    }
+    #search {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .result {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 4px;
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      transition: background 0.2s;
+    }
+    .result:hover {
+      background: #fafafa;
+    }
+    .code {
+      font-weight: 700;
+      color: #0066cc;
+      margin-right: 0.5rem;
+    }
+    .description {
+      flex: 1;
+      color: #666;
+    }
+    .copy-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 0.5rem;
+    }
+    footer p {
+      margin: 0;
+      font-size: 0.875rem;
+      color: #999;
+    }
+  </style>
+
+</head>
+<body>
+
+  <header>
+    <h1>BuscaCID</h1>
+    <p>Consulta rápida de códigos <strong>CID-10</strong>.</p>
+  </header>
+
+  <main class="container">
+    <input
+      type="search"
+      id="search"
+      placeholder="Ex.: A00, cólera, febre, asma"
+      aria-label="Busca de CID"
+      autocomplete="off"
+    />
+
+    <div id="results"></div>
+  </main>
+
+  <footer>
+    <p>© 2025 BuscaCID</p>
+  </footer>
+
+  <script src="data.js" defer></script>
+  <script defer>
+    // Normalize text: remove accents and lowercase
+    function normalize(text) {
+      return text.normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .toLowerCase();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('search');
+      const resultsContainer = document.getElementById('results');
+      let timeoutId;
+
+      function debounce(fn, delay) {
+        return (...args) => {
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => fn(...args), delay);
+        };
+      }
+
+      function updateResults() {
+        const rawQuery = input.value.trim();
+        if (rawQuery.length < 2) {
+          resultsContainer.innerHTML = '';
+          return;
+        }
+        // Remove dots for code search
+        const plainQuery = rawQuery.replace(/\./g, '');
+        const query = normalize(plainQuery);
+        const wordRegex = new RegExp('\\b' + query);
+        resultsContainer.innerHTML = '';
+
+        const matches = data.filter(item => {
+          const cidNorm = normalize(item.CID).replace(/\./g, '');
+          const descNorm = normalize(item.DESC_SUBCATEGORIA || '');
+          const capNorm = normalize(item.DESC_CAPITULO || '');
+          return cidNorm.startsWith(query)
+              || wordRegex.test(descNorm)
+              || wordRegex.test(capNorm);
+        }).slice(0, 50);
+
+        if (matches.length === 0) {
+          resultsContainer.innerHTML = '<p>Nenhum CID encontrado.</p>';
+          return;
+        }
+
+        matches.forEach(item => {
+          const codeText = item.CID;
+          const div = document.createElement('div');
+          div.className = 'result';
+          // Code span with copy button next to it
+          const codeSpan = document.createElement('span');
+          codeSpan.className = 'code';
+          codeSpan.textContent = codeText;
+
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'copy-btn';
+          copyBtn.setAttribute('aria-label', 'Copiar ' + codeText);
+          copyBtn.textContent = '📋';
+          copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(codeText).then(() => {
+              copyBtn.textContent = '✅';
+              setTimeout(() => copyBtn.textContent = '📋', 1000);
+            });
+          });
+
+          const descSpan = document.createElement('span');
+          descSpan.className = 'description';
+          descSpan.textContent = item.DESC_SUBCATEGORIA;
+
+          div.appendChild(codeSpan);
+          div.appendChild(copyBtn);
+          div.appendChild(descSpan);
+
+          resultsContainer.appendChild(div);
+        });
+      }
+
+      input.addEventListener('input', debounce(updateResults, 250));
+    });
+  </script>
+
+</body>
+</html>
