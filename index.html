@@ -13,9 +13,8 @@
   <title>BuscaCID – Busca CID-10, Procura CID e Consulta de Doenças</title>
   <meta name="description" content="Faça busca CID-10, procura CID ou consulte o código de qualquer doença em tempo real: asma, febre, hipertensão, diabetes e muito mais.">
   <meta name="keywords" content="busca cid, procura cid, consulta cid, CID-10, código CID, asma, febre, hipertensão, diabetes">
-
   <meta name="robots" content="index,follow">
-  
+
   <!-- Structured Data: FAQPage -->
   <script type="application/ld+json">
   {
@@ -27,7 +26,7 @@
         "name": "Como faço para buscar o CID-10 de asma?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Digite ‘asma’ ou ‘J45’ na caixa de busca para encontrar o CID-10 correspondente."
+          "text": "Digite 'asma' ou 'J45' na caixa de busca para encontrar o CID-10 correspondente."
         }
       },
       {
@@ -35,7 +34,7 @@
         "name": "Posso procurar CID por sintoma?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Sim — basta digitar o sintoma (‘febre’, ‘tosse’) que mostramos todos os códigos relacionados."
+          "text": "Sim — basta digitar o sintoma ('febre', 'tosse') que mostramos todos os códigos relacionados."
         }
       },
       {
@@ -43,7 +42,7 @@
         "name": "Como encontrar o CID de uma doença específica?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Use termos como ‘CID de diabetes’ ou ‘procura CID de hipertensão’ para resultados precisos."
+          "text": "Use termos como 'CID de diabetes' ou 'procura CID de hipertensão' para resultados precisos."
         }
       }
     ]
@@ -87,63 +86,54 @@
   <script src="data.js" defer></script>
   <script defer>
     function normalize(text) {
-      return text.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+      return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     }
     document.addEventListener('DOMContentLoaded', () => {
       const input = document.getElementById('search');
       const resultsContainer = document.getElementById('results');
       let timeoutId;
-      function debounce(fn, delay) {
-        return (...args) => {
-          clearTimeout(timeoutId);
-          timeoutId = setTimeout(() => fn(...args), delay);
-        };
-      }
-      function updateResults() {
-        const rawQuery = input.value.trim();
-        if (rawQuery.length < 2) { resultsContainer.innerHTML=''; return; }
-        const plainQuery = rawQuery.replace(/\./g,'');
-        const query = normalize(plainQuery);
-        const wordRegex = new RegExp('\b'+query);
-        resultsContainer.innerHTML='';
+      const debounce = (fn, delay) => (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn(...args), delay);
+      };
+      const updateResults = () => {
+        const raw = input.value.trim();
+        if (raw.length < 2) { resultsContainer.innerHTML = ''; return; }
+        const query = normalize(raw.replace(/\./g, ''));
+        const wordRegex = new RegExp('\b' + query);
+        resultsContainer.innerHTML = '';
         const matches = data.filter(item => {
-          const cidNorm = normalize(item.CID).replace(/\./g,'');
-          const descNorm = normalize(item.DESC_SUBCATEGORIA||'');
-          const capNorm = normalize(item.DESC_CAPITULO||'');
-          return cidNorm.startsWith(query)
-              || wordRegex.test(descNorm)
-              || wordRegex.test(capNorm);
-        }).slice(0,50);
-        if (matches.length===0) {
-          resultsContainer.innerHTML='<p>Nenhum CID encontrado.</p>';
+          const codeNorm = normalize(item.code.replace(/\./g, ''));
+          const descNorm = normalize(item.desc);
+          return codeNorm.startsWith(query) || wordRegex.test(descNorm);
+        }).slice(0, 50);
+        if (!matches.length) {
+          resultsContainer.innerHTML = '<p>Nenhum CID encontrado.</p>';
           return;
         }
         matches.forEach(item => {
-          const codeText = item.CID;
           const div = document.createElement('div');
-          div.className='result';
+          div.className = 'result';
           const codeSpan = document.createElement('span');
-          codeSpan.className='code';
-          codeSpan.textContent=codeText;
+          codeSpan.className = 'code';
+          codeSpan.textContent = item.code;
           const copyBtn = document.createElement('button');
-          copyBtn.className='copy-btn';
-          copyBtn.setAttribute('aria-label','Copiar '+codeText);
-          copyBtn.textContent='📋';
-          copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(codeText).then(() => {
-              copyBtn.textContent='✅';
-              setTimeout(() => copyBtn.textContent='📋', 1000);
+          copyBtn.className = 'copy-btn';
+          copyBtn.setAttribute('aria-label', 'Copiar ' + item.code);
+          copyBtn.textContent = '📋';
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(item.code).then(() => {
+              copyBtn.textContent = '✅';
+              setTimeout(() => copyBtn.textContent = '📋', 1000);
             });
-          });
+          };
           const descSpan = document.createElement('span');
-          descSpan.className='description';
-          descSpan.textContent=item.DESC_SUBCATEGORIA;
-          div.appendChild(codeSpan);
-          div.appendChild(copyBtn);
-          div.appendChild(descSpan);
+          descSpan.className = 'description';
+          descSpan.textContent = item.desc;
+          div.append(codeSpan, copyBtn, descSpan);
           resultsContainer.appendChild(div);
         });
-      }
+      };
       input.addEventListener('input', debounce(updateResults, 250));
     });
   </script>
