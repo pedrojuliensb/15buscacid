@@ -2,83 +2,163 @@
 <html lang="pt-BR">
 <head>
   <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6911735406572203" crossorigin="anonymous"></script>
+  <script async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6911735406572203"
+          crossorigin="anonymous"></script>
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>BuscaCID – Busca CID-10, Procura CID e Consulta de Doenças</title>
   <meta name="description" content="Faça busca CID-10, procura CID ou consulte o código de qualquer doença em tempo real: asma, febre, hipertensão, diabetes e muito mais.">
   <meta name="keywords" content="busca cid, procura cid, consulta cid, CID-10, código CID, asma, febre, hipertensão, diabetes">
   <meta name="robots" content="index,follow">
 
-  <!-- FAQ Schema -->
+  <!-- Structured Data: FAQPage -->
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-    {"@type":"Question","name":"Como faço para buscar o CID-10 de asma?","acceptedAnswer":{"@type":"Answer","text":"Digite 'asma' ou 'J45' na caixa de busca para encontrar o CID-10 correspondente."}},
-    {"@type":"Question","name":"Posso procurar CID por sintoma?","acceptedAnswer":{"@type":"Answer","text":"Sim — basta digitar o sintoma ('febre', 'tosse') que mostramos todos os códigos relacionados."}},
-    {"@type":"Question","name":"Como encontrar o CID de uma doença específica?","acceptedAnswer":{"@type":"Answer","text":"Use termos como 'CID de diabetes' ou 'procura CID de hipertensão' para resultados precisos."}}
-  ]}
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Como faço para buscar o CID-10 de asma?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Digite 'asma' ou 'J45' na caixa de busca para encontrar o CID-10 correspondente."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Posso procurar CID por sintoma?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sim — basta digitar o sintoma ('febre', 'tosse') que mostramos todos os códigos relacionados."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Como encontrar o CID de uma doença específica?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use termos como 'CID de diabetes' ou 'procura CID de hipertensão' para resultados precisos."
+        }
+      }
+    ]
+  }
   </script>
 
   <style>
-    body {margin:0;font-family:Arial,sans-serif;background:#f4f4f4;color:#333;}
-    header,footer{text-align:center;padding:1rem;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.1);}
-    .container{max-width:800px;margin:2rem auto;background:#fff;padding:2rem;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-    h1{margin:0;font-size:2rem;color:#0066cc;}
-    h2{margin-top:0.5rem;font-size:1.25rem;color:#333;}
-    #search{width:100%;padding:0.75rem;font-size:1rem;border:1px solid #ddd;border-radius:4px;box-shadow:inset 0 1px 3px rgba(0,0,0,0.1);margin-top:1rem;margin-bottom:1.5rem;}
-    .result{display:flex;align-items:center;background:#fff;border:1px solid #eee;border-radius:4px;padding:0.75rem;margin-bottom:0.5rem;transition:background 0.2s;}
-    .result:hover{background:#fafafa;}
-    .code{font-weight:700;color:#0066cc;margin-right:0.5rem;}
-    .description{flex:1;color:#666;}
-    .copy-btn{background:none;border:none;cursor:pointer;font-size:1rem;margin-left:0.5rem;}
-    footer p{margin:0;font-size:0.875rem;color:#999;}
+    body { margin: 0; font-family: Arial, sans-serif; background: #f4f4f4; color: #333; }
+    header, footer { text-align: center; padding: 1rem; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .container { max-width: 800px; margin: 2rem auto; background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    h1 { margin: 0; font-size: 2rem; color: #0066cc; }
+    h2 { margin-top: 0.5rem; font-size: 1.25rem; color: #333; }
+    #search { width: 100%; padding: 0.75rem; font-size: 1rem; border: 1px solid #ddd; border-radius: 4px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); margin-top: 1rem; margin-bottom: 1.5rem; }
+    .result { display: flex; align-items: center; background: #fff; border: 1px solid #eee; border-radius: 4px; padding: 0.75rem; margin-bottom: 0.5rem; transition: background 0.2s; }
+    .result:hover { background: #fafafa; }
+    .code { font-weight: 700; color: #0066cc; margin-right: 0.5rem; }
+    .description { flex: 1; color: #666; }
+    .copy-btn { background: none; border: none; cursor: pointer; font-size: 1rem; margin-left: 0.5rem; }
+    footer p { margin: 0; font-size: 0.875rem; color: #999; }
   </style>
+
 </head>
 <body>
+
   <header>
     <h1>BuscaCID</h1>
     <h2>Encontre o CID-10 de qualquer doença: busca CID, procura CID, CID de diabetes, asma, febre…</h2>
   </header>
+
   <main class="container">
-    <input type="search" id="search" placeholder="Ex.: asma, febre, CID de diabetes, procura CID, hipertensão" aria-label="Busca de CID" autocomplete="off" />
+    <input type="search" id="search"
+           placeholder="Ex.: asma, febre, CID de diabetes, procura CID, hipertensão"
+           aria-label="Busca de CID" autocomplete="off" />
     <div id="results"></div>
   </main>
-  <footer><p>© 2025 BuscaCID</p></footer>
+
+  <footer>
+    <p>© 2025 BuscaCID</p>
+  </footer>
+
   <script src="data.js" defer></script>
   <script defer>
-    function normalize(text){return text.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();}
-    document.addEventListener('DOMContentLoaded',()=>{
-      const input=document.getElementById('search');
-      const results=document.getElementById('results');
-      let tid;
-      const debounce=(fn,d)=>{return(...a)=>{clearTimeout(tid);tid=setTimeout(()=>fn(...a),d);};};
-      const update=()=>{
-        const raw=input.value.trim();
-        if(raw.length<2){results.innerHTML='';return;}
-        const q=normalize(raw.replace(/\./g,''));
-        const terms=q.split(/\s+/);
-        results.innerHTML='';
-        const matches=data.filter(item=>{
-          const codeN=normalize(item.code.replace(/\./g,''));
-          const descN=normalize(item.desc);
-          if(codeN.startsWith(q))return true;
-          return terms.every(t=>descN.includes(t));
-        }).slice(0,50);
-        if(!matches.length){results.innerHTML='<p>Nenhum CID encontrado.</p>';return;}
-        matches.forEach(item=>{
-          const div=document.createElement('div');div.className='result';
-          const cspan=document.createElement('span');cspan.className='code';cspan.textContent=item.code;
-          const btn=document.createElement('button');btn.className='copy-btn';btn.setAttribute('aria-label','Copiar '+item.code);btn.textContent='📋';
-          btn.onclick=()=>{navigator.clipboard.writeText(item.code).then(()=>{btn.textContent='✅';setTimeout(()=>btn.textContent='📋',1000);});};
-          const dspan=document.createElement('span');dspan.className='description';dspan.textContent=item.desc;
-          div.append(cspan,btn,dspan);results.appendChild(div);
+    function normalize(text) {
+      return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('search');
+      const resultsContainer = document.getElementById('results');
+      let timeoutId;
+
+      const debounce = (fn, delay) => (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn(...args), delay);
+      };
+
+      const updateResults = () => {
+        const raw = input.value.trim();
+        if (raw.length < 2) {
+          resultsContainer.innerHTML = '';
+          return;
+        }
+        const query = normalize(raw.replace(/\./g, ''));
+        const terms = query.split(/\s+/);
+
+        resultsContainer.innerHTML = '';
+        const matches = data.filter(item => {
+          // fallback property names
+          const codeRaw = item.code || item.CID || '';
+          const descRaw = item.desc || item.DESC_SUBCATEGORIA || '';
+          const codeNorm = normalize(codeRaw.replace(/\./g, ''));
+          const descNorm = normalize(descRaw);
+          if (codeNorm.startsWith(query)) return true;
+          // match all words
+          return terms.every(term => descNorm.includes(term));
+        }).slice(0, 50);
+
+        if (!matches.length) {
+          resultsContainer.innerHTML = '<p>Nenhum CID encontrado.</p>';
+          return;
+        }
+
+        matches.forEach(item => {
+          const codeRaw = item.code || item.CID || '';
+          const descRaw = item.desc || item.DESC_SUBCATEGORIA || '';
+          const div = document.createElement('div');
+          div.className = 'result';
+
+          const codeSpan = document.createElement('span');
+          codeSpan.className = 'code';
+          codeSpan.textContent = codeRaw;
+
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'copy-btn';
+          copyBtn.setAttribute('aria-label', 'Copiar ' + codeRaw);
+          copyBtn.textContent = '📋';
+          copyBtn.addEventListener('click', () => {
+            navigator.clipboard.writeText(codeRaw).then(() => {
+              copyBtn.textContent = '✅';
+              setTimeout(() => copyBtn.textContent = '📋', 1000);
+            });
+          });
+
+          const descSpan = document.createElement('span');
+          descSpan.className = 'description';
+          descSpan.textContent = descRaw;
+
+          div.appendChild(codeSpan);
+          div.appendChild(copyBtn);
+          div.appendChild(descSpan);
+          resultsContainer.appendChild(div);
         });
       };
-      input.addEventListener('input',debounce(update,250));
+
+      input.addEventListener('input', debounce(updateResults, 250));
     });
   </script>
+
 </body>
 </html>
