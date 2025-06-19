@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://14buscacid.vercel.app/sitemap.xml
+Sitemap: https://seusite.com.br/sitemap.xml
